@@ -2,33 +2,34 @@
   "name": "madridbarmap",
   "version": "0.1.0",
   "private": true,
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-  "lint": "eslint",
-  "postinstall": "prisma generate"
-},
-"dependencies": {
-  "@auth/prisma-adapter": "^2.11.1",
-  "@prisma/client": "^5.22.0",
-  "@vis.gl/react-google-maps": "^1.7.1",
-  "next": "16.0.7",
-  "next-auth": "^5.0.0-beta.30",
-  "prisma": "^5.22.0",
-  "react": "19.2.0",
-  "react-dom": "19.2.0",
-  "zod": "^4.1.13",
-  "zustand": "^5.0.9"
-},
-"devDependencies": {
-  "@tailwindcss/postcss": "^4",
-  "@types/node": "^20",
-  "@types/react": "^19",
-  "@types/react-dom": "^19",
-  "dotenv": "^17.2.3",
-  "eslint": "^9",
-  "eslint-config-next": "16.0.7",
-  "tailwindcss": "^4",
-  "typescript": "^5"
-}
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
+    "@prisma/client": "^5.22.0",
+    "@vis.gl/react-google-maps": "^1.7.1",
+    "next": "16.0.7",
+    "next-auth": "^5.0.0-beta.30",
+    "prisma": "^5.22.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "zod": "^4.1.13",
+    "zustand": "^5.0.9"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dotenv": "^17.2.3",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.7",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
 }
