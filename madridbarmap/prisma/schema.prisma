@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+
+// NextAuth.js Models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// Application Models
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  reviews       Review[]
+  barsCreated   Bar[]     @relation("CreatedBars")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Bar {
+  id            String   @id @default(cuid())
+  googlePlaceId String?  @unique @map("google_place_id")
+  name          String
+  latitude    Float
+  longitude   Float
+  address     String?
+  createdById String   @map("created_by_id")
+  createdBy   User     @relation("CreatedBars", fields: [createdById], references: [id], onDelete: Cascade)
+  reviews     Review[]
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([latitude, longitude])
+  @@index([createdById])
+  @@map("bars")
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  barId       String   @map("bar_id")
+  bar         Bar      @relation(fields: [barId], references: [id], onDelete: Cascade)
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  terraza     String
+  precioDoble Decimal  @map("precio_doble")
+  tapa        String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@unique([barId, userId])
+  @@index([barId])
+  @@index([userId])
+  @@map("reviews")
+}
