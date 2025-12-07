@@ -90,13 +90,25 @@ model Review {
   bar         Bar      @relation(fields: [barId], references: [id], onDelete: Cascade)
   userId      String   @map("user_id")
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  terraza     String
+  terraza     Terraza
   precioDoble Decimal  @map("precio_doble")
-  tapa        String
+  tapa        Tapa
   createdAt   DateTime @default(now()) @map("created_at")
 
   @@unique([barId, userId])
   @@index([barId])
   @@index([userId])
   @@map("reviews")
+}
+
+enum Terraza {
+  SIN_TERRAZA
+  PEQUENA
+  GRANDE
+}
+
+enum Tapa {
+  SIN_TAPA
+  REGULAR
+  SUPER_TAPA
 }
