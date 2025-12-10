@@ -14,14 +14,17 @@ function SplitLayoutInner({ children }: SplitLayoutProps) {
     // Only access store after client-side hydration
     const selectedPlaceId = useAppStore((state) => mounted ? state.selectedPlaceId : null);
     const bottomSheetExpanded = useAppStore((state) => mounted ? state.bottomSheetExpanded : false);
+    const panelMode = useAppStore((state) => mounted ? state.panelMode : "search");
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
     // Determine bottom sheet height based on state
+    // Auto-expand when in review mode so form fields are visible
     const getBottomSheetHeight = () => {
         if (!selectedPlaceId) return "h-[35vh]"; // Welcome message
+        if (panelMode === "review") return "h-[90vh]"; // Review form needs max space
         if (bottomSheetExpanded) return "h-[85vh]"; // Expanded with details
         return "h-[45vh]"; // Collapsed showing stats + CTA button visible
     };
