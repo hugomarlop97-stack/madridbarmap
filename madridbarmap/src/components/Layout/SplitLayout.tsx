@@ -20,13 +20,12 @@ function SplitLayoutInner({ children }: SplitLayoutProps) {
         setMounted(true);
     }, []);
 
-    // Determine bottom sheet height based on state
-    // Auto-expand when in review mode so form fields are visible
-    const getBottomSheetHeight = () => {
-        if (!selectedPlaceId) return "h-[35vh]"; // Welcome message
-        if (panelMode === "review") return "h-[90vh]"; // Review form needs max space
-        if (bottomSheetExpanded) return "h-[85vh]"; // Expanded with details
-        return "h-[45vh]"; // Collapsed showing stats + CTA button visible
+    // Determine bottom sheet height based on state (using vh values for inline style)
+    const getBottomSheetHeightStyle = (): string => {
+        if (!selectedPlaceId) return "35vh"; // Welcome message
+        if (panelMode === "review") return "92vh"; // Review form needs max space
+        if (bottomSheetExpanded) return "85vh"; // Expanded with details
+        return "45vh"; // Collapsed showing stats + CTA button visible
     };
 
     return (
@@ -39,27 +38,29 @@ function SplitLayoutInner({ children }: SplitLayoutProps) {
             {/* Panel Section - Floating Overlay */}
             {/* Desktop: Floating Sidebar on Left */}
             {/* Mobile: Bottom Sheet with dynamic height */}
-            <div className={`
-                absolute 
-                
-                md:top-4 md:left-4 md:bottom-4 md:w-[400px] 
-                md:bg-white md:dark:bg-zinc-900 
-                md:rounded-xl md:shadow-xl md:border md:border-zinc-200 md:dark:border-zinc-800
-                md:overflow-hidden md:flex md:flex-col
-                md:h-auto
+            <div
+                className="
+                    absolute 
+                    
+                    md:top-4 md:left-4 md:bottom-4 md:w-[400px] 
+                    md:bg-white md:dark:bg-zinc-900 
+                    md:rounded-xl md:shadow-xl md:border md:border-zinc-200 md:dark:border-zinc-800
+                    md:overflow-hidden md:flex md:flex-col
+                    md:h-auto
 
-                bottom-0 left-0 right-0 
-                ${getBottomSheetHeight()}
-                bg-white dark:bg-zinc-900 
-                rounded-t-3xl md:rounded-xl
-                shadow-[0_-8px_30px_rgba(0,0,0,0.12)]
-                border-t md:border-t-0 border-zinc-200 dark:border-zinc-800 
-                
-                z-20
-                flex flex-col
-                transition-all duration-300 ease-out
-                pointer-events-auto
-            `}>
+                    bottom-0 left-0 right-0 
+                    bg-white dark:bg-zinc-900 
+                    rounded-t-3xl md:rounded-xl
+                    shadow-[0_-8px_30px_rgba(0,0,0,0.12)]
+                    border-t md:border-t-0 border-zinc-200 dark:border-zinc-800 
+                    
+                    z-20
+                    flex flex-col
+                    transition-all duration-300 ease-out
+                    pointer-events-auto
+                "
+                style={{ height: getBottomSheetHeightStyle() }}
+            >
                 {/* Mobile Handle */}
                 <div className="md:hidden w-full flex justify-center pt-2 pb-1 shrink-0">
                     <div className="w-10 h-1 bg-zinc-300 rounded-full"></div>
@@ -76,4 +77,3 @@ function SplitLayoutInner({ children }: SplitLayoutProps) {
 export default function SplitLayout({ children }: SplitLayoutProps) {
     return <SplitLayoutInner>{children}</SplitLayoutInner>;
 }
-
