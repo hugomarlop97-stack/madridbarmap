@@ -43,42 +43,44 @@ function StatsGrid({ bar }: { bar: BarWithStats | null }) {
     return (
         <div className="grid grid-cols-3 gap-2 mt-3">
             {/* Price - Most important */}
-            <div className="flex flex-col items-center justify-center bg-amber-50 rounded-xl p-3 min-h-[72px] border border-amber-100">
-                <span className="text-2xl font-bold text-amber-700">
+            <div className="flex flex-col items-center justify-center bg-amber-50 rounded-xl p-3 min-h-[80px] border border-amber-100">
+                <span className="text-[10px] text-amber-500 font-semibold uppercase tracking-wide">Caña/Doble</span>
+                <span className="text-2xl font-bold text-amber-700 mt-1">
                     {bar.avgPrice ? `${bar.avgPrice.toFixed(2)}€` : "—"}
                 </span>
-                <span className="text-xs text-amber-600 mt-1 font-medium">Doble</span>
             </div>
 
-            {/* Terrace - ❌/🪑/🏖️ */}
-            <div className="flex flex-col items-center justify-center bg-green-50 rounded-xl p-3 min-h-[72px] border border-green-100">
-                <span className="text-2xl">
+            {/* Terrace */}
+            <div className="flex flex-col items-center justify-center bg-green-50 rounded-xl p-3 min-h-[80px] border border-green-100">
+                <span className="text-[10px] text-green-600 font-semibold uppercase tracking-wide">Terraza</span>
+                <span className="text-2xl mt-1">
                     {bar.mostVotedTerraza === 'SIN_TERRAZA' && "❌"}
                     {bar.mostVotedTerraza === 'PEQUENA' && "🪑"}
                     {bar.mostVotedTerraza === 'GRANDE' && "🏖️"}
                     {!bar.mostVotedTerraza && "❓"}
                 </span>
-                <span className="text-xs text-green-700 mt-1 font-medium">
-                    {bar.mostVotedTerraza === 'SIN_TERRAZA' && "Interior"}
+                <span className="text-[10px] text-green-700 font-medium">
+                    {bar.mostVotedTerraza === 'SIN_TERRAZA' && "No tiene"}
                     {bar.mostVotedTerraza === 'PEQUENA' && "Pequeña"}
                     {bar.mostVotedTerraza === 'GRANDE' && "Grande"}
-                    {!bar.mostVotedTerraza && "Terraza"}
+                    {!bar.mostVotedTerraza && "Sin datos"}
                 </span>
             </div>
 
-            {/* Tapa - ❌/🥒/🥘 */}
-            <div className="flex flex-col items-center justify-center bg-orange-50 rounded-xl p-3 min-h-[72px] border border-orange-100">
-                <span className="text-2xl">
+            {/* Tapa */}
+            <div className="flex flex-col items-center justify-center bg-orange-50 rounded-xl p-3 min-h-[80px] border border-orange-100">
+                <span className="text-[10px] text-orange-500 font-semibold uppercase tracking-wide">Tapa</span>
+                <span className="text-2xl mt-1">
                     {bar.mostVotedTapa === 'SIN_TAPA' && "❌"}
                     {bar.mostVotedTapa === 'REGULAR' && "🥒"}
                     {bar.mostVotedTapa === 'SUPER_TAPA' && "🥘"}
                     {!bar.mostVotedTapa && "❓"}
                 </span>
-                <span className="text-xs text-orange-700 mt-1 font-medium">
-                    {bar.mostVotedTapa === 'SIN_TAPA' && "Sin tapa"}
+                <span className="text-[10px] text-orange-700 font-medium">
+                    {bar.mostVotedTapa === 'SIN_TAPA' && "No ponen"}
                     {bar.mostVotedTapa === 'REGULAR' && "Normal"}
-                    {bar.mostVotedTapa === 'SUPER_TAPA' && "¡Top!"}
-                    {!bar.mostVotedTapa && "Tapa"}
+                    {bar.mostVotedTapa === 'SUPER_TAPA' && "¡Raciones!"}
+                    {!bar.mostVotedTapa && "Sin datos"}
                 </span>
             </div>
         </div>
