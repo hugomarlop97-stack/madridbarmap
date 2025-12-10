@@ -21,9 +21,9 @@ function SplitLayoutInner({ children }: SplitLayoutProps) {
 
     // Determine bottom sheet height based on state
     const getBottomSheetHeight = () => {
-        if (!selectedPlaceId) return "h-[30vh]"; // Welcome message
+        if (!selectedPlaceId) return "h-[35vh]"; // Welcome message
         if (bottomSheetExpanded) return "h-[85vh]"; // Expanded with details
-        return "h-[35vh]"; // Collapsed showing only stats
+        return "h-[45vh]"; // Collapsed showing stats + CTA button visible
     };
 
     return (

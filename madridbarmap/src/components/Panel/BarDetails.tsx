@@ -50,28 +50,28 @@ function StatsGrid({ bar }: { bar: BarWithStats | null }) {
                 <span className="text-xs text-amber-600 mt-1 font-medium">Doble</span>
             </div>
 
-            {/* Terrace */}
+            {/* Terrace - Sun icons for outdoor */}
             <div className="flex flex-col items-center justify-center bg-green-50 rounded-xl p-3 min-h-[72px] border border-green-100">
                 <span className="text-2xl">
-                    {bar.mostVotedTerraza === 'SIN_TERRAZA' && "🚫"}
-                    {bar.mostVotedTerraza === 'PEQUENA' && "👌"}
-                    {bar.mostVotedTerraza === 'GRANDE' && "🌳"}
+                    {bar.mostVotedTerraza === 'SIN_TERRAZA' && "🏠"}
+                    {bar.mostVotedTerraza === 'PEQUENA' && "☀️"}
+                    {bar.mostVotedTerraza === 'GRANDE' && "🌞"}
                     {!bar.mostVotedTerraza && "❓"}
                 </span>
                 <span className="text-xs text-green-700 mt-1 font-medium">
-                    {bar.mostVotedTerraza === 'SIN_TERRAZA' && "Sin terraza"}
+                    {bar.mostVotedTerraza === 'SIN_TERRAZA' && "Interior"}
                     {bar.mostVotedTerraza === 'PEQUENA' && "Pequeña"}
                     {bar.mostVotedTerraza === 'GRANDE' && "Grande"}
                     {!bar.mostVotedTerraza && "Terraza"}
                 </span>
             </div>
 
-            {/* Tapa */}
+            {/* Tapa - Food progression */}
             <div className="flex flex-col items-center justify-center bg-orange-50 rounded-xl p-3 min-h-[72px] border border-orange-100">
                 <span className="text-2xl">
-                    {bar.mostVotedTapa === 'SIN_TAPA' && "🥜"}
-                    {bar.mostVotedTapa === 'REGULAR' && "🥪"}
-                    {bar.mostVotedTapa === 'SUPER_TAPA' && "🥘"}
+                    {bar.mostVotedTapa === 'SIN_TAPA' && "❌"}
+                    {bar.mostVotedTapa === 'REGULAR' && "🍿"}
+                    {bar.mostVotedTapa === 'SUPER_TAPA' && "🍽️"}
                     {!bar.mostVotedTapa && "❓"}
                 </span>
                 <span className="text-xs text-orange-700 mt-1 font-medium">

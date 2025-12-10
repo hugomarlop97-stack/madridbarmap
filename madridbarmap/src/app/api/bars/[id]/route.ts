@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { calculateMode, calculateAverage } from "@/lib/utils";
+import { calculateMode, calculateMedian } from "@/lib/utils";
 import { BarDetail } from "@/types";
 
 // GET /api/bars/[id] - Get bar details with reviews
@@ -64,7 +64,7 @@ export async function GET(
       })),
       stats: {
         reviewCount: bar.reviews.length,
-        avgPrice: calculateAverage(precios),
+        avgPrice: calculateMedian(precios),
         mostVotedTerraza: calculateMode(terrazas),
         mostVotedTapa: calculateMode(tapas),
       },

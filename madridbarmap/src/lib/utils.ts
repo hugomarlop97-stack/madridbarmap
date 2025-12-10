@@ -20,15 +20,22 @@ export function calculateMode<T>(arr: T[]): T | null {
   return mode;
 }
 
-export function calculateAverage(numbers: (Prisma.Decimal | number)[]): number {
+export function calculateMedian(numbers: (Prisma.Decimal | number)[]): number {
   if (numbers.length === 0) return 0;
 
-  const sum = numbers.reduce<number>((acc, num) => {
-    const value = typeof num === "number" ? num : Number(num);
-    return acc + value;
-  }, 0);
+  // Convert all to numbers and sort
+  const sorted = numbers
+    .map((num) => (typeof num === "number" ? num : Number(num)))
+    .sort((a, b) => a - b);
 
-  return Math.round((sum / numbers.length) * 100) / 100;
+  const mid = Math.floor(sorted.length / 2);
+
+  // If odd number of elements, return middle. If even, average the two middle values.
+  const median = sorted.length % 2 !== 0
+    ? sorted[mid]
+    : (sorted[mid - 1] + sorted[mid]) / 2;
+
+  return Math.round(median * 100) / 100;
 }
 
 export function formatTerraza(terraza: Terraza): string {

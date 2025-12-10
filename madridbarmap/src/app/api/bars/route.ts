@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { createBarSchema } from "@/lib/validations";
-import { calculateMode, calculateAverage } from "@/lib/utils";
+import { calculateMode, calculateMedian } from "@/lib/utils";
 import { BarWithStats } from "@/types";
 
 // GET /api/bars - List all bars with aggregated stats
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
         address: bar.address,
         createdAt: bar.createdAt,
         reviewCount: bar.reviews.length,
-        avgPrice: calculateAverage(precios),
+        avgPrice: calculateMedian(precios),
         mostVotedTerraza: calculateMode(terrazas),
         mostVotedTapa: calculateMode(tapas),
         googlePlaceId: bar.googlePlaceId,
