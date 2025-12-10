@@ -50,12 +50,12 @@ function StatsGrid({ bar }: { bar: BarWithStats | null }) {
                 <span className="text-xs text-amber-600 mt-1 font-medium">Doble</span>
             </div>
 
-            {/* Terrace - Sun icons for outdoor */}
+            {/* Terrace - ❌/🪑/🏖️ */}
             <div className="flex flex-col items-center justify-center bg-green-50 rounded-xl p-3 min-h-[72px] border border-green-100">
                 <span className="text-2xl">
-                    {bar.mostVotedTerraza === 'SIN_TERRAZA' && "🏠"}
-                    {bar.mostVotedTerraza === 'PEQUENA' && "☀️"}
-                    {bar.mostVotedTerraza === 'GRANDE' && "🌞"}
+                    {bar.mostVotedTerraza === 'SIN_TERRAZA' && "❌"}
+                    {bar.mostVotedTerraza === 'PEQUENA' && "🪑"}
+                    {bar.mostVotedTerraza === 'GRANDE' && "🏖️"}
                     {!bar.mostVotedTerraza && "❓"}
                 </span>
                 <span className="text-xs text-green-700 mt-1 font-medium">
@@ -66,12 +66,12 @@ function StatsGrid({ bar }: { bar: BarWithStats | null }) {
                 </span>
             </div>
 
-            {/* Tapa - Food progression */}
+            {/* Tapa - ❌/🥒/🥘 */}
             <div className="flex flex-col items-center justify-center bg-orange-50 rounded-xl p-3 min-h-[72px] border border-orange-100">
                 <span className="text-2xl">
                     {bar.mostVotedTapa === 'SIN_TAPA' && "❌"}
-                    {bar.mostVotedTapa === 'REGULAR' && "🍿"}
-                    {bar.mostVotedTapa === 'SUPER_TAPA' && "🍽️"}
+                    {bar.mostVotedTapa === 'REGULAR' && "🥒"}
+                    {bar.mostVotedTapa === 'SUPER_TAPA' && "🥘"}
                     {!bar.mostVotedTapa && "❓"}
                 </span>
                 <span className="text-xs text-orange-700 mt-1 font-medium">
