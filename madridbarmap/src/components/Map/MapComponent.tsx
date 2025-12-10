@@ -66,7 +66,7 @@ export default function MapComponent({
         className="w-full h-full"
         defaultCenter={MADRID_CENTER}
         defaultZoom={DEFAULT_ZOOM}
-        mapId="madridbarmap"
+        mapId="terrazapp"
         onContextmenu={handleMapRightClick}
         onClick={(ev: MapMouseEvent) => {
           if (ev.detail.placeId) {

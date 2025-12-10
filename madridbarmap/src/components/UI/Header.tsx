@@ -31,7 +31,7 @@ export default function Header({ session }: HeaderProps) {
         {/* Logo - Compact */}
         <div className="flex items-center gap-1.5 shrink-0">
           <span className="text-xl">🍺</span>
-          <h1 className="text-base font-bold text-gray-900 hidden sm:block">MadridBarMap</h1>
+          <h1 className="text-base font-bold text-gray-900 hidden sm:block">Terrazapp</h1>
         </div>
 
         {/* Search Bar - Maximized */}

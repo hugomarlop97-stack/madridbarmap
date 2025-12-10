@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MadridBarMap - Mapa de bares de Madrid",
+  title: "Terrazapp - Mapa de bares de Madrid",
   description:
     "Descubre los mejores bares de Madrid con reseñas de terraza, precio y tapa",
 };

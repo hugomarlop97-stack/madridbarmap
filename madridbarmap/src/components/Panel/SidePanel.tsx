@@ -10,7 +10,7 @@ export default function SidePanel() {
     if (!selectedPlaceId) {
         return (
             <div className="p-8 text-center text-zinc-500 flex flex-col items-center justify-center h-full">
-                <h2 className="text-xl font-semibold mb-2">Bienvenido a MadridBarMap</h2>
+                <h2 className="text-xl font-semibold mb-2">Bienvenido a Terrazapp</h2>
                 <p>Busca un bar o selecciona uno en el mapa para ver detalles y añadir reseñas.</p>
             </div>
         );
