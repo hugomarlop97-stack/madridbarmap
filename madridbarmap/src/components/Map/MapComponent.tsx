@@ -75,9 +75,12 @@ export default function MapComponent({
           }
         }}
         gestureHandling="greedy"
-        disableDefaultUI={false}
-        mapTypeControl={true}
-        mapTypeControlOptions={{ position: 3 }} // 3 = TOP_RIGHT
+        disableDefaultUI={true}
+        zoomControl={false}
+        mapTypeControl={false}
+        fullscreenControl={false}
+        streetViewControl={false}
+        scaleControl={false}
       >
         {bars.map((bar) => (
           <BarMarker

@@ -1,14 +1,23 @@
 import { ReactNode } from "react";
+import { useAppStore } from "@/store/useAppStore";
 
 interface SplitLayoutProps {
     children: [ReactNode, ReactNode]; // [Map, Panel]
 }
 
-export default function SplitLayout({ children }: SplitLayoutProps) {
+function SplitLayoutInner({ children }: SplitLayoutProps) {
     const [mapComponent, panelComponent] = children;
+    const { selectedPlaceId, bottomSheetExpanded } = useAppStore();
+
+    // Determine bottom sheet height based on state
+    const getBottomSheetHeight = () => {
+        if (!selectedPlaceId) return "h-[30vh]"; // Welcome message
+        if (bottomSheetExpanded) return "h-[85vh]"; // Expanded with details
+        return "h-[35vh]"; // Collapsed showing only stats
+    };
 
     return (
-        <div className="relative w-full h-[calc(100vh-64px)] overflow-hidden">
+        <div className="relative w-full h-[calc(100vh-52px)] overflow-hidden">
             {/* Map Section - Always Full Screen Background */}
             <div className="absolute inset-0 z-0">
                 {mapComponent}
@@ -16,8 +25,8 @@ export default function SplitLayout({ children }: SplitLayoutProps) {
 
             {/* Panel Section - Floating Overlay */}
             {/* Desktop: Floating Sidebar on Left */}
-            {/* Mobile: Bottom Sheet */}
-            <div className="
+            {/* Mobile: Bottom Sheet with dynamic height */}
+            <div className={`
                 absolute 
                 
                 // Desktop: Sidebar style
@@ -25,10 +34,11 @@ export default function SplitLayout({ children }: SplitLayoutProps) {
                 md:bg-white md:dark:bg-zinc-900 
                 md:rounded-xl md:shadow-xl md:border md:border-zinc-200 md:dark:border-zinc-800
                 md:overflow-hidden md:flex md:flex-col
+                md:h-auto
 
-                // Mobile: Bottom Sheet style
+                // Mobile: Bottom Sheet style with dynamic height
                 bottom-0 left-0 right-0 
-                h-[45vh] md:h-auto
+                ${getBottomSheetHeight()}
                 bg-white dark:bg-zinc-900 
                 rounded-t-3xl md:rounded-xl
                 shadow-[0_-8px_30px_rgba(0,0,0,0.12)]
@@ -36,18 +46,23 @@ export default function SplitLayout({ children }: SplitLayoutProps) {
                 
                 z-20
                 flex flex-col
-                transition-all duration-300 ease-in-out
+                transition-all duration-300 ease-out
                 pointer-events-auto
-            ">
+            `}>
                 {/* Mobile Handle */}
-                <div className="md:hidden w-full flex justify-center pt-3 pb-1 shrink-0">
-                    <div className="w-12 h-1.5 bg-zinc-300 rounded-full"></div>
+                <div className="md:hidden w-full flex justify-center pt-2 pb-1 shrink-0">
+                    <div className="w-10 h-1 bg-zinc-300 rounded-full"></div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto custom-scrollbar">
                     {panelComponent}
                 </div>
             </div>
         </div>
     );
+}
+
+// Wrapper to use hooks (since the original was a plain function component)
+export default function SplitLayout({ children }: SplitLayoutProps) {
+    return <SplitLayoutInner>{children}</SplitLayoutInner>;
 }

@@ -3,11 +3,49 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --touch-target-min: 44px;
+  --transition-fast: 150ms;
+  --transition-normal: 300ms;
+  --shadow-sheet: 0 -8px 30px rgba(0,0,0,0.15);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure touch targets are accessible */
+button, 
+[role="button"],
+a {
+  min-height: var(--touch-target-min);
+}
+
+/* Smooth transitions for interactive elements */
+.transition-sheet {
+  transition: height var(--transition-normal) ease-out,
+              transform var(--transition-normal) ease-out;
+}
+
+/* Custom scrollbar for panels */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 
 /* Google Maps InfoWindow styles */
@@ -17,4 +55,20 @@ body {
 
 .gm-style-iw-d {
   overflow: hidden !important;
+}
+
+/* Animation for dropdown */
+@keyframes fadeInSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeInSlideDown 200ms ease-out;
 }

@@ -19,8 +19,74 @@ interface GooglePlaceDetails {
     photos?: { photo_reference: string }[];
 }
 
+// Reusable Stats Grid Component - Shows Price/Terrace/Tapa prominently
+function StatsGrid({ bar }: { bar: BarWithStats | null }) {
+    if (!bar) {
+        return (
+            <div className="grid grid-cols-3 gap-2 mt-3">
+                <div className="flex flex-col items-center justify-center bg-gray-50 rounded-xl p-3 min-h-[72px]">
+                    <span className="text-2xl">💶</span>
+                    <span className="text-xs text-gray-400 mt-1">Sin datos</span>
+                </div>
+                <div className="flex flex-col items-center justify-center bg-gray-50 rounded-xl p-3 min-h-[72px]">
+                    <span className="text-2xl">☀️</span>
+                    <span className="text-xs text-gray-400 mt-1">Sin datos</span>
+                </div>
+                <div className="flex flex-col items-center justify-center bg-gray-50 rounded-xl p-3 min-h-[72px]">
+                    <span className="text-2xl">🍽️</span>
+                    <span className="text-xs text-gray-400 mt-1">Sin datos</span>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="grid grid-cols-3 gap-2 mt-3">
+            {/* Price - Most important */}
+            <div className="flex flex-col items-center justify-center bg-amber-50 rounded-xl p-3 min-h-[72px] border border-amber-100">
+                <span className="text-2xl font-bold text-amber-700">
+                    {bar.avgPrice ? `${bar.avgPrice.toFixed(2)}€` : "—"}
+                </span>
+                <span className="text-xs text-amber-600 mt-1 font-medium">Doble</span>
+            </div>
+
+            {/* Terrace */}
+            <div className="flex flex-col items-center justify-center bg-green-50 rounded-xl p-3 min-h-[72px] border border-green-100">
+                <span className="text-2xl">
+                    {bar.mostVotedTerraza === 'SIN_TERRAZA' && "🚫"}
+                    {bar.mostVotedTerraza === 'PEQUENA' && "👌"}
+                    {bar.mostVotedTerraza === 'GRANDE' && "🌳"}
+                    {!bar.mostVotedTerraza && "❓"}
+                </span>
+                <span className="text-xs text-green-700 mt-1 font-medium">
+                    {bar.mostVotedTerraza === 'SIN_TERRAZA' && "Sin terraza"}
+                    {bar.mostVotedTerraza === 'PEQUENA' && "Pequeña"}
+                    {bar.mostVotedTerraza === 'GRANDE' && "Grande"}
+                    {!bar.mostVotedTerraza && "Terraza"}
+                </span>
+            </div>
+
+            {/* Tapa */}
+            <div className="flex flex-col items-center justify-center bg-orange-50 rounded-xl p-3 min-h-[72px] border border-orange-100">
+                <span className="text-2xl">
+                    {bar.mostVotedTapa === 'SIN_TAPA' && "🥜"}
+                    {bar.mostVotedTapa === 'REGULAR' && "🥪"}
+                    {bar.mostVotedTapa === 'SUPER_TAPA' && "🥘"}
+                    {!bar.mostVotedTapa && "❓"}
+                </span>
+                <span className="text-xs text-orange-700 mt-1 font-medium">
+                    {bar.mostVotedTapa === 'SIN_TAPA' && "Sin tapa"}
+                    {bar.mostVotedTapa === 'REGULAR' && "Normal"}
+                    {bar.mostVotedTapa === 'SUPER_TAPA' && "¡Top!"}
+                    {!bar.mostVotedTapa && "Tapa"}
+                </span>
+            </div>
+        </div>
+    );
+}
+
 export default function BarDetails() {
-    const { selectedPlaceId, setPanelMode } = useAppStore();
+    const { selectedPlaceId, setPanelMode, bottomSheetExpanded, setBottomSheetExpanded } = useAppStore();
 
     const [googleData, setGoogleData] = useState<GooglePlaceDetails | null>(null);
     const [internalBar, setInternalBar] = useState<BarWithStats | null>(null);
@@ -64,95 +130,100 @@ export default function BarDetails() {
     }, [selectedPlaceId]);
 
     if (!selectedPlaceId) return null;
-    if (loading) return <div className="p-8"><LoadingSpinner /></div>;
+    if (loading) return <div className="p-8 flex justify-center"><LoadingSpinner /></div>;
     if (error) return <div className="p-8 text-red-500">{error}</div>;
     if (!googleData) return <div className="p-8">No se encontró el lugar.</div>;
 
     return (
-        <div className="space-y-6">
-            <div className="p-4">
-                <h1 className="text-2xl font-bold text-gray-900">{googleData.name}</h1>
-                <p className="text-gray-600 text-sm mt-1">{googleData.formatted_address}</p>
-
-                {googleData.rating && (
-                    <div className="flex items-center gap-2 mt-2 text-sm text-amber-600">
-                        <span>★ {googleData.rating}</span>
-                        <span className="text-gray-400">({googleData.user_ratings_total} reseñas en Google)</span>
+        <div className="flex flex-col h-full">
+            {/* HEADER - Always visible, shows CORE data first */}
+            <div
+                className="bg-white p-4 cursor-pointer"
+                onClick={() => setBottomSheetExpanded(!bottomSheetExpanded)}
+            >
+                <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                        <h1 className="text-xl font-bold text-gray-900 truncate">{googleData.name}</h1>
+                        {internalBar && internalBar.reviewCount > 0 && (
+                            <p className="text-xs text-gray-500 mt-0.5">
+                                {internalBar.reviewCount} valoración{internalBar.reviewCount > 1 ? 'es' : ''} de usuarios
+                            </p>
+                        )}
                     </div>
+                    {/* Expand/Collapse indicator */}
+                    <button
+                        className="ml-2 p-1 text-gray-400 transition-transform duration-200"
+                        style={{ transform: bottomSheetExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                        aria-label={bottomSheetExpanded ? "Colapsar" : "Expandir"}
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </button>
+                </div>
+
+                {/* STATS GRID - The core value proposition, ALWAYS visible */}
+                <StatsGrid bar={internalBar} />
+
+                {/* Hint to expand */}
+                {!bottomSheetExpanded && (
+                    <p className="text-center text-xs text-gray-400 mt-3">
+                        Toca para ver más detalles
+                    </p>
                 )}
-
-                <div className="mt-4 flex gap-2">
-                    {googleData.website && (
-                        <a
-                            href={googleData.website}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-blue-600 text-sm hover:underline"
-                        >
-                            Sitio Web
-                        </a>
-                    )}
-                </div>
             </div>
 
-            <hr className="border-gray-100" />
-
-            {/* Enhanced Stats Display */}
-            <div className="px-4">
-                <div className="bg-white border border-gray-200 shadow-sm rounded-xl p-4">
-                    <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                        <span className="bg-amber-100 text-amber-700 p-1 rounded">📊</span> Valoración MadridBarMap
-                    </h3>
-
-                    {internalBar ? (
-                        <div className="grid grid-cols-3 gap-4 text-center divide-x divide-gray-100">
-                            {/* Price */}
-                            <div className="flex flex-col items-center">
-                                <span className="text-xs text-gray-500 mb-1">Doble</span>
-                                <div className="text-lg font-bold text-gray-900 bg-gray-50 px-2 py-1 rounded-lg w-full">
-                                    {internalBar.avgPrice ? `${internalBar.avgPrice.toFixed(2)}€` : "-"}
-                                </div>
-                            </div>
-
-                            {/* Terrace */}
-                            <div className="flex flex-col items-center pl-4">
-                                <span className="text-xs text-gray-500 mb-1">Terraza</span>
-                                <div className="text-2xl" title={internalBar.mostVotedTerraza || ""}>
-                                    {internalBar.mostVotedTerraza === 'SIN_TERRAZA' && "🚫"}
-                                    {internalBar.mostVotedTerraza === 'PEQUENA' && "👌"}
-                                    {internalBar.mostVotedTerraza === 'GRANDE' && "🌳"}
-                                    {!internalBar.mostVotedTerraza && "❓"}
-                                </div>
-                                <div className="text-[10px] text-gray-400 mt-1 truncate w-full">
-                                    {internalBar.mostVotedTerraza?.replace("SIN_TERRAZA", "No tiene")?.replace("PEQUENA", "Pequeña")?.replace("GRANDE", "Grande") || "-"}
-                                </div>
-                            </div>
-
-                            {/* Tapa */}
-                            <div className="flex flex-col items-center pl-4">
-                                <span className="text-xs text-gray-500 mb-1">Tapa</span>
-                                <div className="text-2xl" title={internalBar.mostVotedTapa || ""}>
-                                    {internalBar.mostVotedTapa === 'SIN_TAPA' && "🥜"}
-                                    {internalBar.mostVotedTapa === 'REGULAR' && "🥪"}
-                                    {internalBar.mostVotedTapa === 'SUPER_TAPA' && "🥘"}
-                                    {!internalBar.mostVotedTapa && "❓"}
-                                </div>
-                                <div className="text-[10px] text-gray-400 mt-1 truncate w-full">
-                                    {internalBar.mostVotedTapa?.replace("SIN_TAPA", "Nada")?.replace("REGULAR", "Normal")?.replace("SUPER_TAPA", "¡Top!") || "-"}
-                                </div>
+            {/* EXPANDED CONTENT - Google details (secondary info) */}
+            {bottomSheetExpanded && (
+                <div className="flex-1 overflow-y-auto border-t border-gray-100 bg-gray-50">
+                    <div className="p-4 space-y-4">
+                        {/* Address */}
+                        <div className="flex items-start gap-3">
+                            <span className="text-lg">📍</span>
+                            <div>
+                                <p className="text-sm font-medium text-gray-900">Dirección</p>
+                                <p className="text-sm text-gray-600">{googleData.formatted_address}</p>
                             </div>
                         </div>
-                    ) : (
-                        <div className="text-center py-4 text-gray-500 text-sm bg-gray-50 rounded-lg border border-dashed border-gray-200">
-                            Sé el primero en valorar este sitio
-                        </div>
-                    )}
+
+                        {/* Google Rating */}
+                        {googleData.rating && (
+                            <div className="flex items-start gap-3">
+                                <span className="text-lg">⭐</span>
+                                <div>
+                                    <p className="text-sm font-medium text-gray-900">Valoración Google</p>
+                                    <p className="text-sm text-gray-600">
+                                        {googleData.rating} ({googleData.user_ratings_total} reseñas)
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Website */}
+                        {googleData.website && (
+                            <div className="flex items-start gap-3">
+                                <span className="text-lg">🌐</span>
+                                <div>
+                                    <p className="text-sm font-medium text-gray-900">Sitio Web</p>
+                                    <a
+                                        href={googleData.website}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-sm text-blue-600 hover:underline"
+                                    >
+                                        Visitar web
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
 
-            <div className="px-4 pb-8">
+            {/* CTA - Fixed at bottom, always visible */}
+            <div className="sticky bottom-0 p-4 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
                 <button
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                    className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3.5 px-4 rounded-xl shadow-md transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 min-h-[48px]"
                     onClick={() => setPanelMode("review")}
                 >
                     <span>✍️</span>
