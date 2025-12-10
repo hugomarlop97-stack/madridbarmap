@@ -72,7 +72,7 @@ function StatsGrid({ bar }: { bar: BarWithStats | null }) {
                 <span className="text-[10px] text-orange-500 font-semibold uppercase tracking-wide">Tapa</span>
                 <span className="text-2xl mt-1">
                     {bar.mostVotedTapa === 'SIN_TAPA' && "❌"}
-                    {bar.mostVotedTapa === 'REGULAR' && "🥒"}
+                    {bar.mostVotedTapa === 'REGULAR' && "🍟"}
                     {bar.mostVotedTapa === 'SUPER_TAPA' && "🥘"}
                     {!bar.mostVotedTapa && "❓"}
                 </span>
