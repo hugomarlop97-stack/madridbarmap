@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { useAppStore } from "@/store/useAppStore";
 
 interface SplitLayoutProps {
@@ -9,7 +9,15 @@ interface SplitLayoutProps {
 
 function SplitLayoutInner({ children }: SplitLayoutProps) {
     const [mapComponent, panelComponent] = children;
-    const { selectedPlaceId, bottomSheetExpanded } = useAppStore();
+    const [mounted, setMounted] = useState(false);
+
+    // Only access store after client-side hydration
+    const selectedPlaceId = useAppStore((state) => mounted ? state.selectedPlaceId : null);
+    const bottomSheetExpanded = useAppStore((state) => mounted ? state.bottomSheetExpanded : false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Determine bottom sheet height based on state
     const getBottomSheetHeight = () => {
@@ -31,14 +39,12 @@ function SplitLayoutInner({ children }: SplitLayoutProps) {
             <div className={`
                 absolute 
                 
-                // Desktop: Sidebar style
                 md:top-4 md:left-4 md:bottom-4 md:w-[400px] 
                 md:bg-white md:dark:bg-zinc-900 
                 md:rounded-xl md:shadow-xl md:border md:border-zinc-200 md:dark:border-zinc-800
                 md:overflow-hidden md:flex md:flex-col
                 md:h-auto
 
-                // Mobile: Bottom Sheet style with dynamic height
                 bottom-0 left-0 right-0 
                 ${getBottomSheetHeight()}
                 bg-white dark:bg-zinc-900 
@@ -64,7 +70,7 @@ function SplitLayoutInner({ children }: SplitLayoutProps) {
     );
 }
 
-// Wrapper to use hooks (since the original was a plain function component)
 export default function SplitLayout({ children }: SplitLayoutProps) {
     return <SplitLayoutInner>{children}</SplitLayoutInner>;
 }
+
